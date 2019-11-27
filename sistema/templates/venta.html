@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block cuerpo %}
+
+{% if object %}
+<form role="form" action="{% url 'productos:modificar_venta' object.pk %}" method="post">
+	<h3>Modificar Venta</h3>
+{% else %}
+<form role="form" action="{% url 'productos:crear_venta' %}" method="post">
+	<h3>Crear Venta</h3>
+{% endif %}
+	{% csrf_token %}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			{{ form.as_p }}
+			{{ detalle_venta_form_set.management_form }}
+			{% for detalle_venta_form in detalle_venta_form_set %}
+				<div class="row">
+					<div class="col-lg-4">
+						<label>Producto</label>
+						{% if detalle_venta_form.producto.errors %}
+							{% for error in detalle_venta_form.producto.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ detalle_venta_form.producto }}
+					</div>
+					<div class="col-lg-4">
+						<label>Cantidad</label>
+						{% if detalle_venta_form.cantidad.errors %}
+							{% for error in detalle_venta_form.cantidad.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ detalle_venta_form.cantidad }}
+					</div>
+					<div class="col-lg-4">
+						<label>Precio</label>
+						{% if detalle_venta_form.precio_venta.errors %}
+							{% for error in detalle_venta_form.precio_venta.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ detalle_venta_form.precio_venta }}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="col-lg-12 text-right">
+		<input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+		<a type="button" class="btn btn-default" href="{% url 'productos:listado_ventas' %}">
+			Cancelar
+		</a>
+	</div>
+</form>
+{% endblock cuerpo %}
